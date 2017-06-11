@@ -51,5 +51,15 @@ namespace SchemaZen.Library.Models {
 
 			return (Table.IsType ? string.Empty : $"CONSTRAINT [{Name}] ") + $"{Type}{IndexType.Space()} ({string.Join(", ", Columns.Select(c => c.Script()).ToArray())})";
 		}
+
+		public string ScriptDrop()
+		{
+			if (Type == "INDEX")
+			{
+				return $"ALTER TABLE [{Table.Owner}].[{Table.Name}] DROP CONSTRAINT [{Name}]";
+			} else {
+				return $"DROP INDEX [{Name}] ON [{Table.Owner}].[{Table.Name}]";		
+			}
+		}
 	}
 }

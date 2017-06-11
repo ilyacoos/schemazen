@@ -14,7 +14,8 @@
 		}
 
 		public string ScriptDrop() {
-			return $"DROP SYNONYM [{Owner}].[{Name}]";
+			return $"IF OBJECT_ID('[{Owner}].[{Name}]', 'SN') IS NOT NULL\r\n" +
+				$"  DROP SYNONYM [{Owner}].[{Name}]";
 		}
 	}
 }

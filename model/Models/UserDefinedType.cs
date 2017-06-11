@@ -96,6 +96,11 @@ namespace SchemaZen.Library.Models {
 			return text.ToString();
 		}
 
+		public string ScriptDrop()
+		{
+			return $"IF EXISTS( select 1 from sys.types t join sys.schemas s on t.schema_id = s.schema_id and t.name = '{Owner}' and s.name = '{Name}')\r\n" +
+				$"  DROP TYPE [{Owner}].[{Name}]";
+		}
 	}
 
 }

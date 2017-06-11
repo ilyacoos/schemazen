@@ -98,7 +98,13 @@ namespace SchemaZen.Library.Models {
 		}
 
 		public string ScriptDrop() {
-			return $"DROP {GetSQLType()} [{Owner}].[{Name}]";
+			if ( GetSQLType() == "View") {
+				return $"IF OBJECT_ID('[{Owner}].[{Name}]', 'V') IS NOT NULL\r\n" +
+					$"  DROP VIEW [{Owner}].[{Name}]";
+			} else {
+				return $"IF EXISTS( select 1 from sys.objects o join sys.schemas s on o.schema_id = s.schema_id and s.name = '{Owner}' and o.name = '{Name}' and o.type in ('FN', 'IF', 'TF', 'P', 'TR') )\r\n" + 
+					$"  DROP { GetSQLType()} [{Owner}].[{Name}]";
+			}
 		}
 
 

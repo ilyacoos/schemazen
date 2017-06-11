@@ -6,5 +6,10 @@
 		public string ScriptCreate() {
 			return Script;
 		}
+
+		public string ScriptDrop()
+		{
+			return $"DROP ROLE [{Name}]";
+		}
 	}
 }

@@ -1272,7 +1272,7 @@ where name = @dbname
 			foreach (var o in objects) {
 				log(TraceLevel.Verbose, $"Scripting {name} {++index} of {objects.Count}...{(index < objects.Count ? "\r" : string.Empty)}");
 				var filePath = Path.Combine(dir, MakeFileName(o) + ".sql");
-				var script = o.ScriptCreate() + "\r\nGO\r\n";
+				var script = o.ScriptDrop() + "\r\nGO\r\n\r\n" + o.ScriptCreate() + "\r\nGO\r\n";
 				File.AppendAllText(filePath, script);
 			}
 		}

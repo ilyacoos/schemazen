@@ -66,7 +66,8 @@ namespace SchemaZen.Library.Models {
 		}
 
 		public string ScriptDrop() {
-			return $"ALTER TABLE [{Table.Owner}].[{Table.Name}] DROP CONSTRAINT [{Name}]\r\n";
+			return $"IF OBJECT_ID('[{Table.Owner}].[{Name}]', 'F') IS NOT NULL\r\n" +
+				$"  ALTER TABLE [{Table.Owner}].[{Table.Name}] DROP CONSTRAINT [{Name}]";
 		}
 	}
 }

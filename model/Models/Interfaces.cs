@@ -9,5 +9,6 @@
 
 	public interface IScriptable {
 		string ScriptCreate();
+		string ScriptDrop();
 	}
 }

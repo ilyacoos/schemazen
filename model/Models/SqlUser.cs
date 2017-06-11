@@ -15,7 +15,8 @@ namespace SchemaZen.Library.Models {
 		}
 
 		public string ScriptDrop() {
-			return $"DROP USER [{Name}]";
+			return $"IF USER_ID('{Name}') IS NOT NULL\r\n" +
+				$"  DROP USER [{Name}]";
 			// NOTE: login is deliberately not dropped
 		}
 

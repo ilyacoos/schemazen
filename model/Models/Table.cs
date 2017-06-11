@@ -26,6 +26,15 @@ if not exists(select s.schema_id from sys.schemas s where s.name = '{Name}')
 end
 ";
 		}
+
+		public string ScriptDrop()
+		{
+			return $@"
+if exists(select s.schema_id from sys.schemas s where s.name = '{Name}') begin
+	exec sp_executesql N'drop schema [{Name}]'
+end
+";
+		}
 	}
 
 	public class Table : INameable, IHasOwner, IScriptable {
@@ -154,7 +163,16 @@ end
 		}
 
 		public string ScriptDrop() {
-			return $"DROP {(IsType ? "TYPE" : "TABLE")} [{Owner}].[{Name}]";
+			if (IsType)
+			{
+				return $"IF EXISTS( select 1 from sys.types t join sys.schemas s on t.schema_id = s.schema_id and s.name = '{Owner}' and t.name = '{Name}' )\r\n" +
+				$"  DROP TYPE [{Owner}].[{Name}]";
+			} else
+			{
+				return $"IF OBJECT_ID('[{Owner}].[{Name}]', 'U') IS NOT NULL\r\n" +
+				$"  DROP TABLE [{Owner}].[{Name}]";
+			}
+			
 		}
 
 
